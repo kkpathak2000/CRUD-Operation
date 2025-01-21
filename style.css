@@ -1,29 +1,27 @@
 body{
-    background-image: url('background.jpg');
+    background-image: url('wp6794197-breaking-bad-4k-wallpapers.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: cover;
+    background-size:cover;
 }
 
 table{
     width: 80%;
     margin: 40px auto;
-    background: rgb(124,154,167);
+    background: hsla(106, 92%, 24%, 0.5);
 }
 
 table.list{
     text-align: center;
     width: 100%;
+    color: #eee;
 }
 
 td{
-    border: 1px solid rgb(204,200,200);
+    border: 1px solid #215f1b73;
     text-align: left;
     padding: 8px 15px;
-}
-
-tr:nth-child(even), table.list thread> tr{
-    background-color: rgb(204,200,200);
+    color: #eee;
 }
 
 input[type="text"],input[type="number"]{
@@ -31,7 +29,7 @@ input[type="text"],input[type="number"]{
     padding:12px 20px;
     margin:8px 0;
     display: inline-block;
-    border: 1px solid rgb(165,161,161);
+    border: 1px solid #d5ff01c1;
     border-radius: 4px;
 }
 
@@ -48,11 +46,11 @@ input[type="submit"],input[type="reset"]{
 }
 
 input[type="submit"]:hover{
-    background: #4b99d8;
+    background: hsl(76, 94%, 47%);
 }
 
 input[type="reset"]:hover{
-    background: #4b99d8;
+    background: hsl(76, 94%, 47%);
 }
 
 button{
@@ -68,5 +66,5 @@ button{
 }
 
 button:hover{
-    background:#4b99d8 ;
+    background:hsl(76, 94%, 47%); 
 }
