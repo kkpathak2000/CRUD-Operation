@@ -1,0 +1,1 @@
+Built a JavaScript CRUD app using HTML and CSS, demonstrating DOM manipulation with getElementById() and getElementsByTagName() to interact with and modify webpage elements to streamline data entry processes for small business clients reducing manual effort by 20%.
