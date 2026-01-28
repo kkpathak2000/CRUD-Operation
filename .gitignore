@@ -1,0 +1,4 @@
+node_modules/
+verification/node_modules/
+*.png
+.DS_Store
