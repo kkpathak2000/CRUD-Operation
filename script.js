@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const storeList = document.getElementById('storeList').getElementsByTagName('tbody')[0];
     const searchInput = document.getElementById('searchInput');
     const exportBtn = document.getElementById('exportBtn');
+    const tableHeaders = document.querySelectorAll('#storeList th');
+    const toastContainer = document.getElementById('toastContainer');
     let selectedRow = null;
+    let currentSort = { column: -1, direction: 'asc' };
 
     // Load data from localStorage on initialization
     loadData();
@@ -17,6 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for CSV export
     exportBtn.addEventListener('click', () => {
         exportToCSV();
+        showToast('Inventory exported successfully');
+    });
+
+    // Event listeners for table sorting
+    tableHeaders.forEach((th, index) => {
+        if (index < 5) { // Only sortable columns (Code, Name, Category, Qty, Price)
+            th.addEventListener('click', () => {
+                sortRows(index);
+            });
+        }
     });
 
     // Event listener for form reset
@@ -28,10 +41,23 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = readFormData();
+
         if (selectedRow === null) {
+            // Check for duplicate product code
+            if (isDuplicateCode(formData.productCode)) {
+                showToast(`Product Code ${formData.productCode} already exists!`, true);
+                return;
+            }
             insertNewRecord(formData);
+            showToast('Product added to inventory');
         } else {
+            // Check for duplicate product code (excluding current row)
+            if (isDuplicateCode(formData.productCode, selectedRow)) {
+                showToast(`Product Code ${formData.productCode} already exists!`, true);
+                return;
+            }
             updateRecord(formData);
+            showToast('Product updated');
         }
         saveData();
         updateDashboard();
@@ -104,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveData();
             updateDashboard();
             resetForm();
+            showToast('Product removed from inventory');
         }
     }
 
@@ -183,6 +210,72 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('totalProducts').textContent = totalProducts;
         document.getElementById('totalQty').textContent = totalQty;
         document.getElementById('totalValue').textContent = `$${totalValue.toFixed(2)}`;
+    }
+
+    // Function to check for duplicate product codes
+    function isDuplicateCode(code, excludeRow = null) {
+        for (let i = 0; i < storeList.rows.length; i++) {
+            const row = storeList.rows[i];
+            if (row === excludeRow) continue;
+            if (row.cells[0].textContent.toUpperCase() === code.toUpperCase()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Function to show toast notifications
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${isError ? 'error' : ''}`;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        // Trigger animation
+        setTimeout(() => toast.classList.add('show'), 10);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Function to sort table rows
+    function sortRows(columnIndex) {
+        const rows = Array.from(storeList.rows);
+        const direction = (currentSort.column === columnIndex && currentSort.direction === 'asc') ? 'desc' : 'asc';
+
+        rows.sort((a, b) => {
+            let valA = a.cells[columnIndex].textContent.trim();
+            let valB = b.cells[columnIndex].textContent.trim();
+
+            // Handle numeric sorting for Qty and Price columns
+            if (columnIndex === 3 || columnIndex === 4) {
+                valA = parseFloat(valA) || 0;
+                valB = parseFloat(valB) || 0;
+            } else {
+                valA = valA.toLowerCase();
+                valB = valB.toLowerCase();
+            }
+
+            if (valA < valB) return direction === 'asc' ? -1 : 1;
+            if (valA > valB) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        // Update UI headers
+        tableHeaders.forEach((th, idx) => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (idx === columnIndex) {
+                th.classList.add(`sort-${direction}`);
+            }
+        });
+
+        currentSort = { column: columnIndex, direction };
+
+        // Re-append rows in sorted order
+        rows.forEach(row => storeList.appendChild(row));
     }
 
     // Function to filter products based on search term
