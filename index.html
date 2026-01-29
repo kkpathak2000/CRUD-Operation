@@ -15,6 +15,21 @@
     </header>
 
     <main class="flex-container">
+        <section class="dashboard-section">
+            <div class="dash-card">
+                <span class="dash-label">Total Products</span>
+                <span class="dash-value" id="totalProducts">0</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-label">Total Quantity</span>
+                <span class="dash-value" id="totalQty">0</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-label">Total Value</span>
+                <span class="dash-value" id="totalValue">$0.00</span>
+            </div>
+        </section>
+
         <section class="form-section">
             <h2>Product Form</h2>
             <form autocomplete="off" id="productForm">
@@ -25,6 +40,17 @@
                 <div class="form-group">
                     <label for="product">Product Name</label>
                     <input type="text" name="product" id="product" required placeholder="e.g. Blue Sky">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Chemicals">Chemicals</option>
+                        <option value="Equipment">Equipment</option>
+                        <option value="Packaging">Packaging</option>
+                        <option value="Distribution">Distribution</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="qty">Quantity</label>
@@ -43,13 +69,22 @@
         </section>
 
         <section class="list-section">
-            <h2>Inventory List</h2>
+            <div class="list-header">
+                <h2>Inventory List</h2>
+                <div class="list-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search products...">
+                    </div>
+                    <button id="exportBtn" class="action-btn">Export CSV</button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="list" id="storeList">
                     <thead>
                         <tr>
                             <th>Product Code</th>
                             <th>Product Name</th>
+                            <th>Category</th>
                             <th>Qty</th>
                             <th>Price</th>
                             <th>Actions</th>
