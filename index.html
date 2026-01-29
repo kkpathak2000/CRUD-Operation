@@ -1,55 +1,68 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Crud Operation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Pollos Hermanos - Inventory Management</title>
     <link type="text/css" rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <table>
-        <tr>
-            <td>
-                <form autocomplete="off" onsubmit="onFormSubmit()">
-                    <div>
-                        <label for="productCode">Product Code</label>
-                        <input type="text" name="productCode" id="productCode">
-                    </div>
-                    <div>
-                        <label for="product">Product Name</label>
-                        <input type="text" name="product" id="product">
-                    </div>
-                    <div>
-                        <label for="qty">Qty</label>
-                        <input type="number" name="qty" id="qty">
-                    </div>
-                    <div>
-                        <label for="perPrice">Price</label>
-                        <input type="number" name="perPrice" id="perPrice">
-                    </div>
+    <header>
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Los_Pollos_Hermanos_logo.png" alt="Los Pollos Hermanos Logo">
+        </div>
+    </header>
 
-                    <div class="form_action--button">
-                        <input type="submit" value="Submit">
-                        <input type="reset" value="Reset">
-                    </div>
-                </form>
+    <main class="flex-container">
+        <section class="form-section">
+            <h2>Product Form</h2>
+            <form autocomplete="off" id="productForm">
+                <div class="form-group">
+                    <label for="productCode">Product Code</label>
+                    <input type="text" name="productCode" id="productCode" required placeholder="e.g. METH-01">
+                </div>
+                <div class="form-group">
+                    <label for="product">Product Name</label>
+                    <input type="text" name="product" id="product" required placeholder="e.g. Blue Sky">
+                </div>
+                <div class="form-group">
+                    <label for="qty">Quantity</label>
+                    <input type="number" name="qty" id="qty" required placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="perPrice">Price ($)</label>
+                    <input type="number" name="perPrice" id="perPrice" required placeholder="0.00">
+                </div>
 
-                <td>
-                    <table class="list" id="storeList">
-                        <thead>
-                            <tr>
-                                <th>Product Code</th>
-                                <th>Product Name</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="form-action-buttons">
+                    <input type="submit" value="Submit">
+                    <input type="reset" value="Reset">
+                </div>
+            </form>
+        </section>
 
-                        </tbody>
-                    </table>
-                </td>
-            </td>
-        </tr>
-    </table>
+        <section class="list-section">
+            <h2>Inventory List</h2>
+            <div class="table-responsive">
+                <table class="list" id="storeList">
+                    <thead>
+                        <tr>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
     <script type="text/javascript" src="./script.js"></script>
 </body>
 </html>

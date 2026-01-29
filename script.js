@@ -1,72 +1,120 @@
-var selectedRow = null
+document.addEventListener('DOMContentLoaded', () => {
+    const productForm = document.getElementById('productForm');
+    const storeList = document.getElementById('storeList').getElementsByTagName('tbody')[0];
+    let selectedRow = null;
 
-function onFormSubmit(e) {
-	event.preventDefault();
-        var formData = readFormData();
-        if (selectedRow == null){
-            insertNewRecord(formData);
-		}
-        else{
-            updateRecord(formData);
-		}
-        resetForm();    
-}
+    // Load data from localStorage on initialization
+    loadData();
 
-//Retrieve the data
-function readFormData() {
-    var formData = {};
-    formData["productCode"] = document.getElementById("productCode").value;
-    formData["product"] = document.getElementById("product").value;
-    formData["qty"] = document.getElementById("qty").value;
-    formData["perPrice"] = document.getElementById("perPrice").value;
-    return formData;
-}
-
-//Insert the data
-function insertNewRecord(data) {
-    var table = document.getElementById("storeList").getElementsByTagName('tbody')[0];
-    var newRow = table.insertRow(table.length);
-    cell1 = newRow.insertCell(0);
-		cell1.innerHTML = data.productCode;
-    cell2 = newRow.insertCell(1);
-		cell2.innerHTML = data.product;
-    cell3 = newRow.insertCell(2);
-		cell3.innerHTML = data.qty;
-    cell4 = newRow.insertCell(3);
-		cell4.innerHTML = data.perPrice;
-    cell4 = newRow.insertCell(4);
-        cell4.innerHTML = `<button onClick="onEdit(this)">Edit</button> <button onClick="onDelete(this)">Delete</button>`;
-}
-
-//Edit the data
-function onEdit(td) {
-    selectedRow = td.parentElement.parentElement;
-    document.getElementById("productCode").value = selectedRow.cells[0].innerHTML;
-    document.getElementById("product").value = selectedRow.cells[1].innerHTML;
-    document.getElementById("qty").value = selectedRow.cells[2].innerHTML;
-    document.getElementById("perPrice").value = selectedRow.cells[3].innerHTML;
-}
-function updateRecord(formData) {
-    selectedRow.cells[0].innerHTML = formData.productCode;
-    selectedRow.cells[1].innerHTML = formData.product;
-    selectedRow.cells[2].innerHTML = formData.qty;
-    selectedRow.cells[3].innerHTML = formData.perPrice;
-}
-
-//Delete the data
-function onDelete(td) {
-    if (confirm('Do you want to delete this record?')) {
-        row = td.parentElement.parentElement;
-        document.getElementById('storeList').deleteRow(row.rowIndex);
+    // Event listener for form reset
+    productForm.addEventListener('reset', () => {
         resetForm();
-    }
-}
+    });
 
-//Reset the data
-function resetForm() {
-    document.getElementById("productCode").value = '';
-    document.getElementById("product").value = '';
-    document.getElementById("qty").value = '';
-    document.getElementById("perPrice").value = '';
-    selectedRow = null;
-}
+    // Event listener for form submission
+    productForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = readFormData();
+        if (selectedRow === null) {
+            insertNewRecord(formData);
+        } else {
+            updateRecord(formData);
+        }
+        saveData();
+        resetForm();
+    });
+
+    // Function to read data from form fields
+    function readFormData() {
+        return {
+            productCode: document.getElementById('productCode').value,
+            product: document.getElementById('product').value,
+            qty: document.getElementById('qty').value,
+            perPrice: document.getElementById('perPrice').value
+        };
+    }
+
+    // Function to insert a new record into the table
+    function insertNewRecord(data) {
+        const newRow = storeList.insertRow();
+        newRow.insertCell(0).textContent = data.productCode;
+        newRow.insertCell(1).textContent = data.product;
+        newRow.insertCell(2).textContent = data.qty;
+        newRow.insertCell(3).textContent = data.perPrice;
+        const actionCell = newRow.insertCell(4);
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'edit-btn';
+        editBtn.addEventListener('click', () => onEdit(newRow));
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.addEventListener('click', () => onDelete(newRow));
+
+        actionCell.appendChild(editBtn);
+        actionCell.appendChild(document.createTextNode(' '));
+        actionCell.appendChild(deleteBtn);
+    }
+
+    // Function to populate form for editing
+    function onEdit(row) {
+        selectedRow = row;
+        document.getElementById('productCode').value = row.cells[0].textContent;
+        document.getElementById('product').value = row.cells[1].textContent;
+        document.getElementById('qty').value = row.cells[2].textContent;
+        document.getElementById('perPrice').value = row.cells[3].textContent;
+
+        // Scroll to form for better UX
+        productForm.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Function to update an existing record
+    function updateRecord(formData) {
+        selectedRow.cells[0].textContent = formData.productCode;
+        selectedRow.cells[1].textContent = formData.product;
+        selectedRow.cells[2].textContent = formData.qty;
+        selectedRow.cells[3].textContent = formData.perPrice;
+        selectedRow = null;
+    }
+
+    // Function to delete a record
+    function onDelete(row) {
+        if (confirm('Do you want to delete this record?')) {
+            row.remove();
+            saveData();
+            resetForm();
+        }
+    }
+
+    // Function to reset the form
+    function resetForm() {
+        productForm.reset();
+        selectedRow = null;
+    }
+
+    // Function to save all table data to localStorage
+    function saveData() {
+        const products = [];
+        for (let i = 0; i < storeList.rows.length; i++) {
+            const row = storeList.rows[i];
+            products.push({
+                productCode: row.cells[0].textContent,
+                product: row.cells[1].textContent,
+                qty: row.cells[2].textContent,
+                perPrice: row.cells[3].textContent
+            });
+        }
+        localStorage.setItem('products', JSON.stringify(products));
+    }
+
+    // Function to load data from localStorage
+    function loadData() {
+        const storedData = localStorage.getItem('products');
+        if (storedData) {
+            const products = JSON.parse(storedData);
+            products.forEach(product => insertNewRecord(product));
+        }
+    }
+});
