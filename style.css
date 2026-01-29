@@ -31,7 +31,7 @@ header {
 .dashboard-section {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 20px;
     margin-bottom: 10px;
 }
@@ -66,6 +66,27 @@ header {
     font-size: 1.8rem;
     font-weight: bold;
     text-shadow: 0 0 10px rgba(213, 255, 1, 0.3);
+}
+
+.low-stock-card {
+    border-color: #600;
+}
+
+.low-stock-card .dash-value {
+    color: #f00;
+}
+
+tr.low-stock {
+    background: rgba(255, 0, 0, 0.1);
+}
+
+tr.low-stock:hover {
+    background: rgba(255, 0, 0, 0.2);
+}
+
+tr.low-stock td:nth-child(5) { /* Qty column */
+    color: #f00;
+    font-weight: bold;
 }
 
 .form-section {
@@ -217,6 +238,19 @@ th.sort-desc::after {
     opacity: 1;
 }
 
+th.no-sort::after {
+    content: none;
+}
+
+th.no-sort {
+    width: 30px;
+    cursor: default;
+}
+
+th.no-sort:hover {
+    background: #215f1b;
+}
+
 td {
     padding: 12px;
     border-bottom: 1px solid #215f1b73;
@@ -319,6 +353,79 @@ button.delete-btn {
 button.edit-btn:hover {
     background: #d5ff01;
     color: #000;
+}
+
+button.delete-selected-btn {
+    background: #600;
+    border-color: #f00;
+    color: #ffcccc;
+}
+
+button.delete-selected-btn:hover {
+    background: #f00;
+    color: #fff;
+    box-shadow: 0 0 10px #f0088;
+}
+
+/* Activity Log */
+.activity-section {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #215f1b;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(33, 95, 27, 0.3);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    color: #ccc;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-time {
+    color: #d5ff01;
+    font-size: 0.75rem;
+    min-width: 80px;
+}
+
+.small-btn {
+    background: transparent;
+    border: 1px solid #215f1b;
+    color: #d5ff01;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.small-btn:hover {
+    background: rgba(213, 255, 1, 0.1);
+    border-color: #d5ff01;
 }
 
 button.delete-btn:hover {
